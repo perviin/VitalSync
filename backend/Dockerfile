@@ -19,7 +19,6 @@
 #    - Séparation des préoccupations: env de build ≠ env de runtime
 #    - Qualité garantie: les tests font échouer le build si nécessaire
 #    - Builds immuables et reproductibles
-# ============================================================================
 
 # Stage 1: Builder - Installation et tests
 FROM node:18-alpine AS builder

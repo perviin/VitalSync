@@ -1,0 +1,42 @@
+# Contrôle de version - Métadonnées du dépôt inutiles
+.git/                       # Historique Git (100+MB)
+.gitignore                  # Configuration Git
+.github/                    # Workflows GitHub et CI/CD
+
+# Documentation
+README.md                   # Documentation (inutile en production)
+*.md                        # Tous fichiers markdown
+docs/                       # Dossier documentation
+
+# IDE et Éditeur
+.vscode/                    # Configuration VSCode
+.idea/                      # Configuration IntelliJ
+*.swp                       # Fichiers temporaires Vim
+*.swo                       # Fichiers swap Vim
+*~                          # Fichiers de sauvegarde éditeur
+.DS_Store                   # Métadonnées macOS
+
+# Logs
+npm-debug.log*              # Logs npm
+yarn-debug.log*             # Logs Yarn
+*.log                       # Tous fichiers journaux
+
+# Node.js (si projet Node.js)
+node_modules/               # Dépendances npm/yarn
+package-lock.json           # Lock file npm
+yarn.lock                   # Lock file Yarn
+
+# Environnement
+.env*                       # Fichiers d'environnement (secrets)
+*.pem                       # Certificats SSL/TLS
+*.key                       # Clés privées
+
+# Build artifacts
+dist/                       # Code compilé
+build/                      # Résultats compilation
+coverage/                   # Rapports de couverture tests
+
+# Docker
+Dockerfile                  # Ce Dockerfile
+.dockerignore               # Ce fichier .dockerignore
+docker-compose.yml          # Fichier Compose
