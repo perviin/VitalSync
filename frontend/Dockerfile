@@ -24,14 +24,10 @@ LABEL description="VitalSync Frontend - Serveur web avec proxy API"
 # Copier le fichier de configuration Nginx personnalisé
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Copier les assets statiques (index.html et autres fichiers frontend)
 COPY index.html /usr/share/nginx/html/
 
-# Créer un utilisateur non-root pour Nginx (sécurité)
-RUN addgroup -g 1001 -S nginx && \
-    adduser -S nginx -u 1001 && \
-    chown -R nginx:nginx /usr/share/nginx/html && \
-    chmod -R 755 /usr/share/nginx/html
+# Assurer les permissions (nginx existe déjà dans l'image)
+RUN chown -R nginx:nginx /usr/share/nginx/html && chmod -R 755 /usr/share/nginx/html
 
 # Changer vers l'utilisateur non-root
 USER nginx

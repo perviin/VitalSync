@@ -1,0 +1,123 @@
+services:
+  # Base de données PostgreSQL - Stockage persistant des données
+  database:
+    image: postgres:16-alpine
+    container_name: vitalsync-postgres
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5432:5432" # Port PostgreSQL
+    volumes:
+      # Volume persistant pour les données PostgreSQL
+      # IMPORTANT: Sans ce volume, les données sont perdues au redémarrage
+      # Avec le volume: les données survivent aux redémarrages et arrêts
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - vitalsync-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # Backend API Node.js - Service applicatif
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: vitalsync-api
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DB_HOST: database
+      DB_PORT: 5432
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      API_URL: http://localhost:3000
+    ports:
+      - "3000:3000" # Port API
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - vitalsync-network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--tries=1",
+          "--spider",
+          "http://localhost:3000/health",
+        ]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+    restart: unless-stopped
+
+  # Frontend Nginx - Serveur web statique et proxy
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: vitalsync-web
+    ports:
+      - "80:80" # Port HTTP
+    depends_on:
+      - backend
+    networks:
+      - vitalsync-network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--tries=1",
+          "--spider",
+          "http://localhost:80/health",
+        ]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+    restart: unless-stopped
+
+# Réseau personnalisé bridge
+# INTÉRÊT DE L'ISOLATION PAR RÉSEAU:
+# 1. ISOLEMENT: Les services communiquent via noms DNS plutôt que par IPs
+# 2. SÉCURITÉ: Pas de communication vers l'extérieur sauf ports exposés
+# 3. PERFORMANCE: Réseau optimisé pour Docker (plus efficace que le host)
+# 4. NOM DE SERVICE: Utilisable comme hostname (ex: http://backend:3000)
+# 5. SCALABILITÉ: Possibilité d'ajouter/supprimer conteneurs dynamiquement
+networks:
+  vitalsync-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+# Volumes persistants
+# SANS VOLUME POUR POSTGRESQL:
+# - Les données sont stockées dans la couche d'écriture du conteneur
+# - Au redémarrage ou suppression: PERTE TOTALE DES DONNÉES
+# - Chaque start crée une nouvelle base vide
+# - Inacceptable en production
+#
+# AVEC VOLUME:
+# - Les données persistent sur l'hôte (répertoire spécifique Docker)
+# - Survit aux redémarrages, arrêts, mises à jour
+# - Sauvegarde et backup possibles
+# - En production: OBLIGATOIRE
+volumes:
+  postgres_data:
+    driver: local
+    driver_opts:
+      # Les données sont stockées dans /var/lib/docker/volumes/
+      type: none
+      o: bind
+      device: ./data/postgres # Optionnel: change le chemin sur l'hôte

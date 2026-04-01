@@ -5,12 +5,24 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 package-lock.json       # Verrouille les versions exactes (généré automatiquement)
+yarn.lock               # Lock file Yarn
 pnpm-lock.yaml          # Équivalent pnpm de package-lock.json
+.pnpm-store/            # Store pnpm
 
 # Variables d'environnement - Contient données sensibles (clés API, mots de passe, secrets)
 .env                    # Fichier principal des variables d'environnement
 .env.local              # Configuration locale spécifique au développeur
 .env.*.local            # Fichiers locaux par environnement (.env.development.local, etc.)
+.env.prod               # Configuration production (ne pas versionner)
+.env.staging            # Configuration staging
+.env.test
+
+# Docker - Données persistantes et configurations
+data/                   # Stockage des données (PostgreSQL, logs, etc.)
+data/**/*               # Tous les fichiers dans data/
+volumes/                # Volumes Docker persistants
+docker-compose.override.yml  # Overrides locaux spécifiques au développeur
+postgres_data/          # Données PostgreSQL
 
 # IDE - Fichiers et paramètres spécifiques à chaque éditeur (varient par développeur)
 .vscode/                # Paramètres VSCode personnels
@@ -21,31 +33,64 @@ pnpm-lock.yaml          # Équivalent pnpm de package-lock.json
 .DS_Store               # Métadonnées macOS (ne concerne pas tous les développeurs)
 *.sublime-project       # Configuration Sublime Text personnelle
 *.sublime-workspace     # Espace de travail Sublime Text
+.project                # Eclipse project file
+.classpath              # Eclipse classpath
+*.iml                   # IntelliJ module files
 
 # Système d'exploitation - Fichiers générés automatiquement selon l'OS (non pertinents)
 Thumbs.db               # Fichier de cache Windows
 .DS_Store               # Métadonnées du Finder sur macOS
+.AppleDouble            # Métadonnées Apple
+.LSOverride             # Métadonnées Apple
 
 # Logs - Fichiers générés à l'exécution (volumineuses, reproduisibles)
 *.log
+logs/
+log/
+*.log.*
+npm-debug*.log
 
 # Artefacts de build - Fichiers générés lors du build (regénérables)
 dist/                   # Code compilé/transpilé
 build/                  # Artefacts de construction
 .next/                  # Fichiers générés par Next.js
 out/                    # Fichiers de sortie de build
+nest-cli.json           # NestJS CLI
+.webpack/               # Cache Webpack
 
 # Tests - Rapports de couverture (non nécessaires en production)
 coverage/               # Rapports de couverture de tests
 .nyc_output/            # Fichiers temporaires de nyc (code coverage tool)
+.jest/                  # Cache Jest
 
 # Docker - Certificats et clés sensibles (données confidentielles)
 *.pem                   # Certificats SSL/TLS
 *.key                   # Clés privées
+*.pfx                   # Certificats PKCS#12
+*.p12                   # Certificats PKCS#12
 
 # Fichiers temporaires et cache - Fichiers de travail non pertinents (regénérables)
 .cache/                 # Dossier de cache d'applications
 tmp/                    # Fichiers temporaires
 temp/                   # Dossier temporaire
 *.tmp                   # Fichiers temporaires divers
+.env.bak                # Backup de fichiers .env
+*.bak                   # Fichiers de sauvegarde
+
+# Dépendances système (peuvent être regénérées)
+.turbo/                 # Turbo cache
+.eslintcache            # ESLint cache
+.parcelcache            # Parcel cache
+.cache-eslint           # ESLint cache
+
+# Documentation générée (non nécessaire)
+docs/generated/
+API_DOCS.md
+GENERATED_*.md
+
+# Secrets
+secrets/
+.secrets/
+*.secret
+key.txt
     
