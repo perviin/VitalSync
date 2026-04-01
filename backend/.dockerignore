@@ -1,0 +1,73 @@
+# .dockerignore - Files/directories to exclude from Docker build context
+#
+# Excluding unused files reduces build context size and improves build performance
+#
+# ============================================================================
+
+# Version Control - Repository metadata not needed in image
+.git/                       # Git repository history (100+ MB, no runtime value)
+.gitignore                  # Git configuration (not needed at runtime)
+.github/                    # GitHub workflows and CI/CD (dev-only)
+
+# Documentation - Reference only, not needed in production image
+README.md                   # Project documentation
+*.md                        # All markdown files
+docs/                       # Documentation folder
+CHANGELOG.md                # Version history
+
+# IDE and Editor - Personal configuration files
+.vscode/                    # VSCode settings (user-specific)
+.idea/                      # IntelliJ configuration
+*.swp                       # Vim temporary files
+*.swo                       # Vim swap files
+*~                          # Editor backup files
+.DS_Store                   # macOS metadata
+
+# Logs - Runtime artifacts from previous builds
+npm-debug.log*              # npm debugging logs
+yarn-debug.log*             # Yarn debugging logs
+yarn-error.log*             # Yarn error logs
+*.log                       # All log files
+
+# Node.js - Excluded to prevent duplication (will be installed fresh in container)
+node_modules/               # Production dependencies reinstalled via npm ci in Dockerfile
+package-lock.json           # Lock file (fresh install in container)
+
+# Environment - Secrets must not be baked into image
+.env*                       # Environment files with potential secrets
+*.pem                       # SSL/TLS certificates
+*.key                       # Private keys
+
+# Build artifacts - Unnecessary artifacts from previous builds
+dist/                       # Compiled output
+build/                      # Build output
+.next/                      # Next.js build artifacts
+coverage/                   # Test coverage reports
+.nyc_output/                # NYC coverage data
+
+# Test files - Not executed in production, reduce image size
+test/                       # Test folder (tests run in builder stage, excluded in production)
+*.test.js                   # Test files
+jest.config.js              # Jest configuration
+supertest/                  # Supertest dependency
+
+# Docker - Exclude Docker config files (no circular dependencies)
+Dockerfile                  # This Dockerfile (prevent context recursion)
+docker-compose.yml          # Compose file (not needed in image)
+.dockerignore               # This file itself
+docker/                     # Docker configuration folder
+
+# Temporary files and cache - Clutter and increase size
+tmp/                        # Temporary directory
+temp/                       # Temporary directory
+*.tmp                       # Temporary files
+.cache/                     # Cache directory
+.npm/                       # npm cache (will be clean in fresh installation)
+
+# Package manager lock files - Excluded to ensure controlled installation
+pnpm-lock.yaml              # pnpm lock file
+yarn.lock                   # Yarn lock file
+
+# Frontend (if present) - Separate container/build process
+frontend/                   # Frontend folder (separate image)
+nginx.conf                  # Nginx config (for frontend/proxy)
