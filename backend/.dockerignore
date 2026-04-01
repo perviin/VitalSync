@@ -1,59 +1,54 @@
-# .dockerignore - Files/directories to exclude from Docker build context
-#
-# Excluding unused files reduces build context size and improves build performance
-#
-# ============================================================================
+# Contrôle de version - Métadonnées du dépôt inutiles dans l'image
+.git/                       # Historique du dépôt Git (100+MB, aucune valeur runtime)
+.gitignore                  # Configuration Git (inutile au runtime)
+.github/                    # Workflows GitHub et CI/CD (réservé au dev)
 
-# Version Control - Repository metadata not needed in image
-.git/                       # Git repository history (100+ MB, no runtime value)
-.gitignore                  # Git configuration (not needed at runtime)
-.github/                    # GitHub workflows and CI/CD (dev-only)
+# Documentation - Référence uniquement, inutile en production
+README.md                   # Documentation du projet
+*.md                        # Tous les fichiers markdown
+docs/                       # Dossier de documentation
+CHANGELOG.md                # Historique des versions
 
-# Documentation - Reference only, not needed in production image
-README.md                   # Project documentation
-*.md                        # All markdown files
-docs/                       # Documentation folder
-CHANGELOG.md                # Version history
+# IDE et Éditeur - Fichiers de configuration personnelle
+.vscode/                    # Configuration VSCode (utilisateur-spécifique)
+.idea/                      # Configuration IntelliJ
+*.swp                       # Fichiers temporaires Vim
+*.swo                       # Fichiers swap Vim
+*~                          # Fichiers de sauvegarde d'éditeur
+.DS_Store                   # Métadonnées macOS
 
-# IDE and Editor - Personal configuration files
-.vscode/                    # VSCode settings (user-specific)
-.idea/                      # IntelliJ configuration
-*.swp                       # Vim temporary files
-*.swo                       # Vim swap files
-*~                          # Editor backup files
-.DS_Store                   # macOS metadata
+# Logs - Artefacts runtime des builds précédents
+npm-debug.log*              # Logs de débogage npm
+yarn-debug.log*             # Logs de débogage Yarn
+yarn-error.log*             # Logs d'erreur Yarn
+*.log                       # Tous les fichiers journaux
 
-# Logs - Runtime artifacts from previous builds
-npm-debug.log*              # npm debugging logs
-yarn-debug.log*             # Yarn debugging logs
-yarn-error.log*             # Yarn error logs
-*.log                       # All log files
+# Node.js - Exclu pour éviter la duplication (réinstallé dans le conteneur)
+node_modules/               # Dépendances réinstallées via npm install en stage builder
+package-lock.json           # Fichier de verrouillage (nouvel install dans builder)
 
-# Node.js - Excluded to prevent duplication (will be installed fresh in container)
-node_modules/               # Production dependencies reinstalled via npm ci in Dockerfile
-package-lock.json           # Lock file (fresh install in container)
+# Environnement - Les secrets ne doivent pas être intégrés dans l'image
+.env*                       # Fichiers d'environnement avec secrets potentiels
+*.pem                       # Certificats SSL/TLS
+*.key                       # Clés privées
 
-# Environment - Secrets must not be baked into image
-.env*                       # Environment files with potential secrets
-*.pem                       # SSL/TLS certificates
-*.key                       # Private keys
+# Artefacts de build - Artefacts inutiles des builds précédents
+dist/                       # Code compilé
+build/                      # Résultats de la compilation
+.next/                      # Artefacts de build Next.js
+coverage/                   # Rapports de couverture de tests
+.nyc_output/                # Données de couverture NYC
 
-# Build artifacts - Unnecessary artifacts from previous builds
-dist/                       # Compiled output
-build/                      # Build output
-.next/                      # Next.js build artifacts
-coverage/                   # Test coverage reports
-.nyc_output/                # NYC coverage data
+# Fichiers de test - Non exécutés en production, réduisent la taille
+test/                       # Dossier test (tests exécutés en stage builder)
+*.test.js                   # Fichiers de test
+jest.config.js              # Configuration Jest
+supertest/                  # Dépendances de test
 
-# Test files - Not executed in production, reduce image size
-test/                       # Test folder (tests run in builder stage, excluded in production)
-*.test.js                   # Test files
-jest.config.js              # Jest configuration
-supertest/                  # Supertest dependency
-
-# Docker - Exclude Docker config files (no circular dependencies)
-Dockerfile                  # This Dockerfile (prevent context recursion)
-docker-compose.yml          # Compose file (not needed in image)
+# Docker - Exclure les fichiers config Docker
+Dockerfile                  # Ce Dockerfile (prévient les références circulaires)
+docker-compose.yml          # Fichier Compose (inutile dans l'image)
+.dockerignore               # Ce fichier .dockerignore
 .dockerignore               # This file itself
 docker/                     # Docker configuration folder
 

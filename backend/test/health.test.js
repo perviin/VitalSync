@@ -18,19 +18,21 @@ app.get("/api/activities", (req, res) => {
   res.json(activities);
 });
 
-test("GET /health returns 200 with status ok", async () => {
-  const res = await request(app).get("/health");
-  expect(res.statusCode).toBe(200);
-  expect(res.body.status).toBe("ok");
-  expect(res.body.uptime).toBeDefined();
-  expect(res.body.timestamp).toBeDefined();
-});
+describe("Health endpoints", () => {
+  it("GET /health returns 200 with status ok", async () => {
+    const res = await request(app).get("/health");
+    expect(res.statusCode).toBe(200);
+    expect(res.body.status).toBe("ok");
+    expect(res.body.uptime).toBeDefined();
+    expect(res.body.timestamp).toBeDefined();
+  });
 
-test("GET /api/activities returns array of activities", async () => {
-  const res = await request(app).get("/api/activities");
-  expect(res.statusCode).toBe(200);
-  expect(Array.isArray(res.body)).toBe(true);
-  expect(res.body.length).toBe(2);
-  expect(res.body[0]).toHaveProperty("name");
-  expect(res.body[0]).toHaveProperty("duration");
+  it("GET /api/activities returns array of activities", async () => {
+    const res = await request(app).get("/api/activities");
+    expect(res.statusCode).toBe(200);
+    expect(Array.isArray(res.body)).toBe(true);
+    expect(res.body.length).toBe(2);
+    expect(res.body[0]).toHaveProperty("name");
+    expect(res.body[0]).toHaveProperty("duration");
+  });
 });
