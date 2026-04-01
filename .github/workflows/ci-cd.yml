@@ -30,7 +30,7 @@ jobs:
           node-version: "18"
 
       - name: Install dependencies
-        run: cd backend && npm ci
+        run: cd backend && npm install
 
       - name: Run ESLint
         run: cd backend && npm run lint
