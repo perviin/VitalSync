@@ -1,0 +1,51 @@
+# Node.js - Dépendances ne doivent pas être versionnées (trop volumineux, regénérables avec npm/yarn)
+node_modules/
+npm-debug.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json       # Verrouille les versions exactes (généré automatiquement)
+pnpm-lock.yaml          # Équivalent pnpm de package-lock.json
+
+# Variables d'environnement - Contient données sensibles (clés API, mots de passe, secrets)
+.env                    # Fichier principal des variables d'environnement
+.env.local              # Configuration locale spécifique au développeur
+.env.*.local            # Fichiers locaux par environnement (.env.development.local, etc.)
+
+# IDE - Fichiers et paramètres spécifiques à chaque éditeur (varient par développeur)
+.vscode/                # Paramètres VSCode personnels
+.idea/                  # Configuration IntelliJ/WebStorm
+*.swp                   # Fichiers temporaires de Vim
+*.swo                   # Fichiers d'échange de Vim
+*~                      # Fichiers de sauvegarde d'éditeurs
+.DS_Store               # Métadonnées macOS (ne concerne pas tous les développeurs)
+*.sublime-project       # Configuration Sublime Text personnelle
+*.sublime-workspace     # Espace de travail Sublime Text
+
+# Système d'exploitation - Fichiers générés automatiquement selon l'OS (non pertinents)
+Thumbs.db               # Fichier de cache Windows
+.DS_Store               # Métadonnées du Finder sur macOS
+
+# Logs - Fichiers générés à l'exécution (volumineuses, reproduisibles)
+*.log
+
+# Artefacts de build - Fichiers générés lors du build (regénérables)
+dist/                   # Code compilé/transpilé
+build/                  # Artefacts de construction
+.next/                  # Fichiers générés par Next.js
+out/                    # Fichiers de sortie de build
+
+# Tests - Rapports de couverture (non nécessaires en production)
+coverage/               # Rapports de couverture de tests
+.nyc_output/            # Fichiers temporaires de nyc (code coverage tool)
+
+# Docker - Certificats et clés sensibles (données confidentielles)
+*.pem                   # Certificats SSL/TLS
+*.key                   # Clés privées
+
+# Fichiers temporaires et cache - Fichiers de travail non pertinents (regénérables)
+.cache/                 # Dossier de cache d'applications
+tmp/                    # Fichiers temporaires
+temp/                   # Dossier temporaire
+*.tmp                   # Fichiers temporaires divers
+    
