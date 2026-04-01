@@ -75,7 +75,7 @@ jobs:
         id: meta-backend
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.REGISTRY }}/pervi/vitalsync-api
+          images: ${{ env.REGISTRY }}/${{ github.repository_owner }}/vitalsync-api
           tags: |
             type=sha,prefix={{branch}}-
             type=ref,event=branch
@@ -87,7 +87,7 @@ jobs:
         id: meta-frontend
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.REGISTRY }}/pervi/vitalsync-web
+          images: ${{ env.REGISTRY }}/${{ github.repository_owner }}/vitalsync-web
           tags: |
             type=sha,prefix={{branch}}-
             type=ref,event=branch
