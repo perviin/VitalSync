@@ -150,16 +150,9 @@ jobs:
           FRONTEND_URL=http://localhost
           EOF
 
-      - name: Pull latest images
-        run: |
-          docker pull ${{ env.REGISTRY }}/${{ github.repository_owner }}/vitalsync-api:develop-${{ github.sha }}
-          docker pull ${{ env.REGISTRY }}/${{ github.repository_owner }}/vitalsync-web:develop-${{ github.sha }}
-        continue-on-error: true
-
       - name: Deploy with docker-compose
         run: |
-          docker tag ${{ env.REGISTRY }}/${{ github.repository_owner }}/vitalsync-api:develop-${{ github.sha }} vitalsync-api:latest || true
-          docker tag ${{ env.REGISTRY }}/${{ github.repository_owner }}/vitalsync-web:develop-${{ github.sha }} vitalsync-web:latest || true
+          docker-compose build
           docker-compose up -d
 
       - name: Wait for services to start
@@ -167,7 +160,7 @@ jobs:
 
       - name: Health check - Database
         run: |
-          docker-compose exec -T database pg_isready -U vitalsync_user
+          docker-compose exec -T database pg_isready -U vitalsync_user -h localhost
 
       - name: Health check - Backend API
         run: |

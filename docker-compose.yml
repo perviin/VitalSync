@@ -116,8 +116,3 @@ networks:
 volumes:
   postgres_data:
     driver: local
-    driver_opts:
-      # Les données sont stockées dans /var/lib/docker/volumes/
-      type: none
-      o: bind
-      device: ./data/postgres # Optionnel: change le chemin sur l'hôte
