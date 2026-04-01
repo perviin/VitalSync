@@ -1,12 +1,7 @@
 const express = require("express");
 const app = express();
 app.get("/health", (req, res) => {
-  res.json({
-    status: "ok",
-    timestamp: new Date(),
-    version: "1.0.0",
-    environment: process.env.NODE_ENV || "development",
-  });
+  res.json({ status: "ok", version: "1.0.0" });
 });
 app.get("/api/activities", (req, res) => {
   res.json([]);
